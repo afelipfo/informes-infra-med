@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pydantic
+pandas
+openpyxl # Necesario para que Pandas lea .xlsx
+python-dotenv
+# Para generar PDF, podríamos usar:
+weasyprint
