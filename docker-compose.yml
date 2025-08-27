@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: informes-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PROJECT_NAME=API de Generación de Informes - Infraestructura Medellín
+      - API_V1_STR=/api/v1
+    networks:
+      - informes-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: informes-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - informes-network
+    restart: unless-stopped
+
+networks:
+  informes-network:
+    driver: bridge

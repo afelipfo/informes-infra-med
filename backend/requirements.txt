@@ -1,6 +1,7 @@
 fastapi
 uvicorn[standard]
 pydantic
+pydantic-settings
 pandas
 openpyxl # Necesario para que Pandas lea .xlsx
 python-dotenv
