@@ -7,7 +7,7 @@ interface ReportDisplayProps {
 
 export function ReportDisplay({ report }: ReportDisplayProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div>
         <h2 className="text-2xl font-bold text-slate-800">Informe Generado</h2>
         <p className="text-slate-600">{report.context}</p>
@@ -15,7 +15,6 @@ export function ReportDisplay({ report }: ReportDisplayProps) {
           <span>Contrato: {report.contract_type}</span> | <span>Año: {report.year}</span>
         </div>
       </div>
-      
       <div className="space-y-4">
         {report.sections.map((section, index) => (
           <ReportSectionCard key={index} section={section} />
