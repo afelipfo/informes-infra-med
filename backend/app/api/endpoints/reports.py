@@ -34,3 +34,26 @@ def generate_report_endpoint(request: ReportRequest):
     except Exception as e:
         # Errores inesperados del servidor
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {e}")
+
+@router.post("/generate-demo", response_model=GeneratedReport, summary="Generar Informe de Demostración")
+def generate_demo_report():
+    """
+    Endpoint de demostración que genera un informe con datos de ejemplo.
+    Útil para probar la funcionalidad sin necesidad de un archivo Excel externo.
+    """
+    # Datos de ejemplo para demostración
+    demo_data = {
+        'presupuesto_aprobado': 1000000.0,
+        'valor_ejecutado': 850000.0,
+        'fecha_fin_planificada': '2025-12-31',
+        'porcentaje_avance_fisico': 85.0
+    }
+    
+    try:
+        generator = ReportGeneratorService(data=demo_data)
+        report_sections = generator.generate_full_report()
+
+        return GeneratedReport(sections=report_sections)
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generando informe de demostración: {e}")

@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { generateReport, GeneratedReport } from '@/lib/api';
+import { generateReport, generateDemoReport, GeneratedReport } from '@/lib/api';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { ReportDisplay } from '@/components/report/ReportDisplay';
-import { LoaderCircle, AlertTriangle } from 'lucide-react';
+import { LoaderCircle, AlertTriangle, PlayCircle } from 'lucide-react';
 
 export default function GenerateReportPage() {
   const [apiUrl, setApiUrl] = useState('');
@@ -34,33 +34,81 @@ export default function GenerateReportPage() {
     }
   };
 
+  const handleDemoReport = async () => {
+    setLoading(true);
+    setError(null);
+    setReport(null);
+
+    try {
+      const result = await generateDemoReport();
+      setReport(result);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-lg font-semibold mb-4">Generar Nuevo Informe</h2>
-        <p className="text-sm text-slate-600 mb-4">
-          Pega la URL de la API que comparte el archivo Excel con los datos del contrato de Urgencia Manifiesta.
-        </p>
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
-          <Input
-            type="url"
-            value={apiUrl}
-            onChange={(e) => setApiUrl(e.target.value)}
-            placeholder="https://ejemplo.com/api/datos_contrato.xlsx"
-            className="flex-grow"
+        
+        {/* Sección de Demostración */}
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
+          <h3 className="text-md font-medium text-blue-900 mb-2">🚀 Prueba Rápida</h3>
+          <p className="text-sm text-blue-700 mb-3">
+            Genera un informe de demostración con datos de ejemplo para ver cómo funciona la aplicación.
+          </p>
+          <Button 
+            onClick={handleDemoReport} 
             disabled={loading}
-          />
-          <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+            className="bg-blue-600 hover:bg-blue-700"
+          >
             {loading ? (
               <>
                 <LoaderCircle className="animate-spin mr-2" size={16} />
-                Generando...
+                Generando Demo...
               </>
             ) : (
-              'Generar Informe'
+              <>
+                <PlayCircle className="mr-2" size={16} />
+                Generar Informe de Demostración
+              </>
             )}
           </Button>
-        </form>
+        </div>
+
+        {/* Sección de URL Personalizada */}
+        <div>
+          <p className="text-sm text-slate-600 mb-4">
+            <strong>O pega la URL</strong> de un archivo Excel público con los datos del contrato de Urgencia Manifiesta.
+          </p>
+          <div className="bg-gray-50 border border-gray-200 rounded-md p-3 mb-4">
+            <p className="text-xs text-gray-600 mb-1"><strong>Ejemplo de URL válida:</strong></p>
+            <code className="text-xs text-gray-800">https://file-examples.com/storage/fe68c8a7c59a8f1a0b5c6f1/2017/10/file_example_XLSX_10.xlsx</code>
+          </div>
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
+            <Input
+              type="url"
+              value={apiUrl}
+              onChange={(e) => setApiUrl(e.target.value)}
+              placeholder="https://ejemplo.com/api/datos_contrato.xlsx"
+              className="flex-grow"
+              disabled={loading}
+            />
+            <Button type="submit" disabled={loading} className="w-full sm:w-auto">
+              {loading ? (
+                <>
+                  <LoaderCircle className="animate-spin mr-2" size={16} />
+                  Generando...
+                </>
+              ) : (
+                'Generar Informe'
+              )}
+            </Button>
+          </form>
+        </div>
       </div>
 
       <div className="mt-8">
