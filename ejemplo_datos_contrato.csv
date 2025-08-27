@@ -1,0 +1,17 @@
+# Archivo de ejemplo: datos_contrato_ejemplo.xlsx
+# Este archivo muestra la estructura que debe tener el Excel para el procesamiento
+
+# Columnas requeridas:
+presupuesto_aprobado,valor_ejecutado,fecha_fin_planificada,porcentaje_avance_fisico
+1000000,750000,2025-12-15,75
+
+# Explicación:
+# - presupuesto_aprobado: 1,000,000 COP
+# - valor_ejecutado: 750,000 COP (75% ejecutado)
+# - fecha_fin_planificada: 15 de diciembre de 2025
+# - porcentaje_avance_fisico: 75% de avance físico
+
+# Para usar este ejemplo:
+# 1. Crea un archivo Excel con estos datos
+# 2. Súbelo a una API o servidor web que devuelva el archivo
+# 3. Usa esa URL en la aplicación
