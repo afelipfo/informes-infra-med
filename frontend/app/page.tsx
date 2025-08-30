@@ -4,353 +4,177 @@ import Link from 'next/link';
 
 export default function HomePage() {
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%)',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
       {/* Animated Background Elements */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          position: 'absolute',
-          top: '-160px',
-          right: '-160px',
-          width: '320px',
-          height: '320px',
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%)',
-          borderRadius: '50%',
-          filter: 'blur(48px)',
-          animation: 'blob 7s infinite'
-        }}></div>
-        <div style={{
-          position: 'absolute',
-          bottom: '-160px',
-          left: '-160px',
-          width: '320px',
-          height: '320px',
-          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, rgba(251, 146, 60, 0.2) 100%)',
-          borderRadius: '50%',
-          filter: 'blur(48px)',
-          animation: 'blob 7s infinite 2s'
-        }}></div>
-        <div style={{
-          position: 'absolute',
-          top: '160px',
-          left: '160px',
-          width: '320px',
-          height: '320px',
-          background: 'radial-gradient(circle, rgba(34, 211, 238, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%)',
-          borderRadius: '50%',
-          filter: 'blur(48px)',
-          animation: 'blob 7s infinite 4s'
-        }}></div>
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-500/20 to-orange-500/20 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
       </div>
 
-      {/* Main Content */}
-      <div style={{
-        position: 'relative',
-        zIndex: 10,
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '4rem 1rem'
-      }}>
-        {/* Hero Section */}
-        <div style={{
-          textAlign: 'center',
-          marginBottom: '4rem'
-        }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '80px',
-            height: '80px',
-            background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
-            borderRadius: '50%',
-            marginBottom: '2rem',
-            animation: 'float 6s ease-in-out infinite'
-          }}>
-            <span style={{ fontSize: '3rem' }}>🏗️</span>
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-900/90 via-purple-900/90 to-slate-900/90 backdrop-blur-lg border-b border-purple-500/20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <Link 
+              href="/" 
+              className="flex items-center space-x-3 group"
+            >
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <span className="text-2xl">🏗️</span>
+              </div>
+              <div className="hidden sm:block">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                  Sistema de Informes
+                </h1>
+                <p className="text-xs text-gray-400">Infraestructura Medellín</p>
+              </div>
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-1">
+              <Link
+                href="/"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white border border-blue-400/30"
+              >
+                🏠 Inicio
+              </Link>
+              <Link
+                href="/generate-report"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 text-gray-300 hover:text-white hover:bg-white/10"
+              >
+                📊 Generar Informe
+              </Link>
+              <Link
+                href="/reports"
+                className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 text-gray-300 hover:text-white hover:bg-white/10"
+              >
+                📋 Ver Informes
+              </Link>
+            </div>
           </div>
-          
-          <h1 style={{
-            fontSize: 'clamp(3rem, 8vw, 7rem)',
-            fontWeight: 'bold',
-            marginBottom: '1.5rem',
-            background: 'linear-gradient(135deg, #ffffff 0%, #dbeafe 50%, #f3e8ff 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            animation: 'glow 2s ease-in-out infinite alternate'
-          }}>
-            Sistema de Informes
-          </h1>
-          
-          <h2 style={{
-            fontSize: 'clamp(1.5rem, 4vw, 3rem)',
-            color: '#bfdbfe',
-            marginBottom: '2rem',
-            fontWeight: 300
-          }}>
-            Secretaría de Infraestructura Física
-          </h2>
-          
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            padding: '0.5rem 1rem',
-            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '9999px',
-            border: '1px solid rgba(59, 130, 246, 0.3)'
-          }}>
-            <span style={{ color: '#bfdbfe', fontSize: '1.125rem' }}>🏛️ Alcaldía de Medellín</span>
-          </div>
-          
-          <p style={{
-            fontSize: '1.25rem',
-            color: '#d1d5db',
-            maxWidth: '64rem',
-            margin: '3rem auto 0',
-            lineHeight: '1.75'
-          }}>
-            Genera informes técnicos automáticos para contratos de Urgencia Manifiesta con 
-            <span style={{
-              background: 'linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              fontWeight: 600
-            }}> análisis inteligente</span> y 
-            <span style={{
-              background: 'linear-gradient(135deg, #a855f7 0%, #ec4899 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              fontWeight: 600
-            }}> resultados instantáneos</span>.
-          </p>
         </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
+      {/* Hero Section */}
+      <div className="text-center mb-16">
+        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mb-8 animate-float">
+          <span className="text-4xl">🏗️</span>
+        </div>
+        
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent animate-glow">
+          Sistema de Informes
+        </h1>
+        
+        <h2 className="text-2xl md:text-4xl text-blue-200 mb-8 font-light">
+          Secretaría de Infraestructura Física
+        </h2>
+        
+        <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-lg rounded-full border border-blue-400/30 mb-8">
+          <span className="text-blue-200 text-lg">🏛️ Alcaldía de Medellín</span>
+        </div>
+        
+        <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+          Genera informes técnicos automáticos para contratos de Urgencia Manifiesta con 
+          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent font-semibold"> análisis inteligente</span> y 
+          <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent font-semibold"> resultados instantáneos</span>.
+        </p>
+      </div>
 
         {/* Action Buttons */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '2rem',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: '5rem'
-        }}>
+        <div className="flex flex-col gap-8 justify-center items-center mb-20">
           <Link 
             href="/generate-report" 
-            style={{
-              position: 'relative',
-              padding: '1.5rem 2rem',
-              background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
-              borderRadius: '1rem',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              textDecoration: 'none',
-              transition: 'all 0.3s ease',
-              transform: 'scale(1)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              minWidth: '300px',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05) translateY(-8px)';
-              e.currentTarget.style.boxShadow = '0 0 40px rgba(59, 130, 246, 0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
-            }}
+            className="relative px-8 py-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl text-decoration-none transition-all duration-300 transform scale-100 hover:scale-105 hover:-translate-y-2 hover:shadow-blue-500/25 flex items-center gap-4 min-w-[300px] justify-center group"
           >
-            <div style={{ fontSize: '3rem', animation: 'bounce 2s infinite' }}>📊</div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ color: 'white', fontWeight: 'bold', fontSize: '1.25rem' }}>Generar Nuevo Informe</div>
-              <div style={{ color: '#dbeafe', fontSize: '0.875rem' }}>Análisis automático de datos</div>
+            <div className="text-5xl animate-bounce">📊</div>
+            <div className="text-left">
+              <div className="text-white font-bold text-xl">Generar Nuevo Informe</div>
+              <div className="text-blue-200 text-sm">Análisis automático de datos</div>
             </div>
           </Link>
           
           <Link 
             href="/reports" 
-            style={{
-              position: 'relative',
-              padding: '1.5rem 2rem',
-              background: 'linear-gradient(135deg, #059669 0%, #0d9488 100%)',
-              borderRadius: '1rem',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              textDecoration: 'none',
-              transition: 'all 0.3s ease',
-              transform: 'scale(1)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              minWidth: '300px',
-              justifyContent: 'center'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.05) translateY(-8px)';
-              e.currentTarget.style.boxShadow = '0 0 40px rgba(5, 150, 105, 0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.25)';
-            }}
+            className="relative px-8 py-6 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl shadow-2xl text-decoration-none transition-all duration-300 transform scale-100 hover:scale-105 hover:-translate-y-2 hover:shadow-emerald-500/25 flex items-center gap-4 min-w-[300px] justify-center group"
           >
-            <div style={{ fontSize: '3rem', animation: 'pulse 2s infinite' }}>📋</div>
-            <div style={{ textAlign: 'left' }}>
-              <div style={{ color: 'white', fontWeight: 'bold', fontSize: '1.25rem' }}>Ver Informes Anteriores</div>
-              <div style={{ color: '#a7f3d0', fontSize: '0.875rem' }}>Historial y análisis</div>
+            <div className="text-5xl animate-pulse">📋</div>
+            <div className="text-left">
+              <div className="text-white font-bold text-xl">Ver Informes Anteriores</div>
+              <div className="text-emerald-200 text-sm">Historial y análisis</div>
             </div>
           </Link>
         </div>
 
         {/* Features Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '2rem',
-          marginBottom: '4rem'
-        }}>
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '1rem',
-            padding: '2rem',
-            border: '1px solid rgba(59, 130, 246, 0.2)',
-            transition: 'all 0.3s ease',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.4)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.borderColor = 'rgba(59, 130, 246, 0.2)';
-          }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1.5rem', animation: 'float 6s ease-in-out infinite' }}>🤖</div>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: 'white' }}>Análisis Inteligente</h3>
-            <p style={{ color: '#d1d5db', lineHeight: '1.75' }}>
-              Procesamiento automático con <span style={{ color: '#22d3ee', fontWeight: 600 }}>IA avanzada</span> que detecta patrones y genera alertas por severidad en tiempo real.
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-lg rounded-2xl p-8 border border-blue-400/20 transition-all duration-300 hover:scale-105 hover:border-blue-400/40 cursor-pointer">
+            <div className="text-6xl mb-6 animate-float">🤖</div>
+            <h3 className="text-2xl font-bold mb-4 text-white">Análisis Inteligente</h3>
+            <p className="text-gray-300 leading-relaxed">
+              Procesamiento automático con <span className="text-cyan-400 font-semibold">IA avanzada</span> que detecta patrones y genera alertas por severidad en tiempo real.
             </p>
-            <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
-              <div style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', animation: 'pulse 1s infinite' }}></div>
-              <div style={{ width: '8px', height: '8px', backgroundColor: '#f59e0b', borderRadius: '50%', animation: 'pulse 1s infinite 1s' }}></div>
-              <div style={{ width: '8px', height: '8px', backgroundColor: '#ef4444', borderRadius: '50%', animation: 'pulse 1s infinite 2s' }}></div>
+            <div className="flex gap-2 mt-4">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
             </div>
           </div>
           
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '1rem',
-            padding: '2rem',
-            border: '1px solid rgba(147, 51, 234, 0.2)',
-            transition: 'all 0.3s ease',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.borderColor = 'rgba(147, 51, 234, 0.4)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.borderColor = 'rgba(147, 51, 234, 0.2)';
-          }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1.5rem', animation: 'float 6s ease-in-out infinite 2s' }}>⚡</div>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: 'white' }}>Resultados Instantáneos</h3>
-            <p style={{ color: '#d1d5db', lineHeight: '1.75' }}>
-              Obtén informes técnicos completos en <span style={{ color: '#ec4899', fontWeight: 600 }}>segundos</span> con análisis presupuestal, cronograma y recomendaciones detalladas.
+          <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 backdrop-blur-lg rounded-2xl p-8 border border-purple-400/20 transition-all duration-300 hover:scale-105 hover:border-purple-400/40 cursor-pointer">
+            <div className="text-6xl mb-6 animate-float" style={{ animationDelay: '2s' }}>⚡</div>
+            <h3 className="text-2xl font-bold mb-4 text-white">Resultados Instantáneos</h3>
+            <p className="text-gray-300 leading-relaxed">
+              Obtén informes técnicos completos en <span className="text-pink-400 font-semibold">segundos</span> con análisis presupuestal, cronograma y recomendaciones detalladas.
             </p>
-            <div style={{ marginTop: '1rem', fontSize: '2rem', animation: 'spin 3s linear infinite' }}>🔄</div>
+            <div className="text-3xl mt-4 animate-spin">🔄</div>
           </div>
           
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(13, 148, 136, 0.1) 100%)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '1rem',
-            padding: '2rem',
-            border: '1px solid rgba(5, 150, 105, 0.2)',
-            transition: 'all 0.3s ease',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.borderColor = 'rgba(5, 150, 105, 0.4)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.borderColor = 'rgba(5, 150, 105, 0.2)';
-          }}>
-            <div style={{ fontSize: '4rem', marginBottom: '1.5rem', animation: 'float 6s ease-in-out infinite 4s' }}>🔒</div>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: 'white' }}>Seguro y Confiable</h3>
-            <p style={{ color: '#d1d5db', lineHeight: '1.75' }}>
-              Procesamiento <span style={{ color: '#10b981', fontWeight: 600 }}>100% local</span> sin comprometer la seguridad de tus datos. Cumple con estándares de gobierno.
+          <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 backdrop-blur-lg rounded-2xl p-8 border border-emerald-400/20 transition-all duration-300 hover:scale-105 hover:border-emerald-400/40 cursor-pointer">
+            <div className="text-6xl mb-6 animate-float" style={{ animationDelay: '4s' }}>🔒</div>
+            <h3 className="text-2xl font-bold mb-4 text-white">Seguro y Confiable</h3>
+            <p className="text-gray-300 leading-relaxed">
+              Procesamiento <span className="text-emerald-400 font-semibold">100% local</span> sin comprometer la seguridad de tus datos. Cumple con estándares de gobierno.
             </p>
-            <div style={{ marginTop: '1rem', fontSize: '2rem', animation: 'pulse 2s infinite' }}>🛡️</div>
+            <div className="text-3xl mt-4 animate-pulse">🛡️</div>
           </div>
         </div>
 
         {/* Stats Section */}
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '1rem',
-          padding: '2rem',
-          border: '1px solid rgba(59, 130, 246, 0.2)'
-        }}>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', textAlign: 'center', color: 'white', marginBottom: '2rem' }}>📈 Estadísticas del Sistema</h3>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '1.5rem'
-          }}>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#22d3ee', marginBottom: '0.5rem' }}>99.9%</div>
-              <div style={{ color: '#d1d5db', fontSize: '0.875rem' }}>Precisión</div>
+        <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-lg rounded-2xl p-8 border border-blue-400/20 mb-16">
+          <h3 className="text-2xl font-bold text-center text-white mb-8">📈 Estadísticas del Sistema</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-cyan-400 mb-2">99.9%</div>
+              <div className="text-gray-300 text-sm">Precisión</div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#a855f7', marginBottom: '0.5rem' }}>&lt;2s</div>
-              <div style={{ color: '#d1d5db', fontSize: '0.875rem' }}>Tiempo de Respuesta</div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-400 mb-2">&lt;2s</div>
+              <div className="text-gray-300 text-sm">Tiempo de Respuesta</div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#ec4899', marginBottom: '0.5rem' }}>24/7</div>
-              <div style={{ color: '#d1d5db', fontSize: '0.875rem' }}>Disponibilidad</div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-pink-400 mb-2">24/7</div>
+              <div className="text-gray-300 text-sm">Disponibilidad</div>
             </div>
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 'bold', color: '#10b981', marginBottom: '0.5rem' }}>100%</div>
-              <div style={{ color: '#d1d5db', fontSize: '0.875rem' }}>Seguro</div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-emerald-400 mb-2">100%</div>
+              <div className="text-gray-300 text-sm">Seguro</div>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '1rem',
-            padding: '1rem 2rem',
-            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: '9999px',
-            border: '1px solid rgba(59, 130, 246, 0.3)'
-          }}>
-            <span style={{ color: '#bfdbfe' }}>🚀</span>
-            <span style={{ color: '#bfdbfe' }}>Powered by Advanced AI Technology</span>
-            <span style={{ color: '#bfdbfe' }}>🚀</span>
+        <div className="text-center">
+          <div className="inline-flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-lg rounded-full border border-blue-400/30">
+            <span className="text-blue-200">🚀</span>
+            <span className="text-blue-200">Powered by Advanced AI Technology</span>
+            <span className="text-blue-200">🚀</span>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
