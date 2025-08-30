@@ -5,5 +5,6 @@ pydantic-settings
 pandas
 openpyxl # Necesario para que Pandas lea .xlsx
 python-dotenv
+python-multipart # Para procesar archivos subidos (File y UploadFile)
 # Para generar PDF, podríamos usar:
 weasyprint
