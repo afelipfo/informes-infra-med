@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Open Sans, Helvetica Neue, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Estilos personalizados para el proyecto */
+.container {
+  max-width: 1200px;
+}
+
+/* Animaciones suaves para botones */
+.btn-hover-effect {
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-hover-effect:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradiente personalizado */
+.bg-gradient-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}

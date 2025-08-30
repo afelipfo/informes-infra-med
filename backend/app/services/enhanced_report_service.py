@@ -55,8 +55,8 @@ class EnhancedReportService:
             valor_ejecutado=contract_data.get('valor_ejecutado'),
             fecha_fin_planificada=self._parse_date(contract_data.get('fecha_fin_planificada')),
             porcentaje_avance_fisico=contract_data.get('porcentaje_avance_fisico'),
-            # Convertir las secciones a un formato de diccionario para el prompt
-        sections_data=[section.model_dump() for section in sections],
+            # Convertir las secciones a un formato de diccionario para la BD
+            sections_data=[section.model_dump() for section in sections],
             raw_data=contract_data,
             original_filename=original_filename,
             file_type=file_type

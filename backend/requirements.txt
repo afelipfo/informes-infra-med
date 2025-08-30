@@ -1,33 +1,35 @@
-fastapi
-uvicorn[standard]
-pydantic
-pydantic-settings
-pandas
-openpyxl # Necesario para que Pandas lea .xlsx
-python-dotenv
-python-multipart # Para procesar archivos subidos (File y UploadFile)
+# FastAPI y servidor
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# Validación y configuración
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Procesamiento de archivos
+pandas==2.1.4
+openpyxl==3.1.2
+python-multipart==0.0.6
 
 # Base de datos
-sqlalchemy[asyncio]
-asyncpg # PostgreSQL async driver
-alembic # Migraciones de base de datos
+sqlalchemy[asyncio]==2.0.23
+asyncpg==0.29.0
+alembic==1.13.1
 
 # Autenticación y seguridad
-python-jose[cryptography]
-passlib[bcrypt]
-python-multipart
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Logging estructurado
+structlog==23.2.0
 
 # Testing
-pytest
-pytest-asyncio
-httpx==0.27.0 # Para tests async
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.27.0
 
-# Logging y monitoreo
-structlog
-python-json-logger
-
-# Para generar PDF, podríamos usar:
-weasyprint
+# PDF Generation (opcional)
+# weasyprint==61.2
 
 # Cache
 redis

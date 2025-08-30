@@ -54,4 +54,13 @@ class TestReportsAPI:
         
         # Assert
         assert response.status_code == 400
+        data = response.json()
+        assert "detail" in data
+        assert "no soportado" in data["detail"]
+        
+        # Act
+        response = await client.post("/api/v1/reports/generate", files=files)
+        
+        # Assert
+        assert response.status_code == 400
         assert "formato de archivo no soportado" in response.json()["detail"].lower()

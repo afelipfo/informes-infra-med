@@ -49,6 +49,31 @@ docker-compose up -d --build
 #### Backend
 ```bash
 cd backend
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Copiar configuración de ejemplo
+cp .env.example .env
+
+# Ejecutar migraciones (opcional, requiere PostgreSQL)
+alembic upgrade head
+
+# Iniciar servidor
+uvicorn app.main:app --reload --port 8000
+```
+
+#### Frontend
+```bash
+cd frontend
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm run dev
+```
+cd backend
 pip install -r requirements.txt
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
