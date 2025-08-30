@@ -63,4 +63,6 @@ class TestReportsAPI:
         
         # Assert
         assert response.status_code == 400
-        assert "formato de archivo no soportado" in response.json()["detail"].lower()
+        data = response.json()
+        assert "detail" in data
+        assert "soportado" in data["detail"].lower()

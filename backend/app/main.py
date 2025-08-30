@@ -20,9 +20,9 @@ app = FastAPI(
 # Configuración de CORS para permitir requests del frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=settings.get_cors_origins(),
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
 
@@ -34,7 +34,4 @@ def read_root():
     """Endpoint raíz para verificar que la API está funcionando."""
     return {"status": "OK", "message": f"Bienvenido a {settings.PROJECT_NAME}"}
 
-@app.get("/health", tags=["Health"])
-def health_check():
-    """Endpoint de health check para monitoreo."""
-    return {"status": "healthy", "service": "informes-api"}
+# Health checks moved to dedicated endpoint module

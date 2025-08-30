@@ -19,18 +19,24 @@ Sistema web para la generación automática de informes técnicos para contratos
 
 ## 🛠️ Instalación y Ejecución
 
-### Prerrequisitos
+### Configuración Inicial (IMPORTANTE)
 
-- Docker
-- Docker Compose
+```bash
+# 1. Clonar el repositorio
+git clone <tu-repo-url>
+cd informes-infra-med
+
+# 2. Configurar proyecto automáticamente
+python scripts/setup.py
+
+# 3. Crear archivos de entorno
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env.local
+```
 
 ### Ejecución con Docker Compose (Recomendado)
 
 ```bash
-# Clonar el repositorio
-git clone <tu-repo-url>
-cd informes-infra-med
-
 # Construir y ejecutar todos los servicios
 docker-compose up --build
 
@@ -43,6 +49,7 @@ docker-compose up -d --build
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
 - **Documentación API**: http://localhost:8000/docs
+- **Health Check**: http://localhost:8000/api/v1/health/detailed
 
 ### Ejecución Manual (Desarrollo)
 

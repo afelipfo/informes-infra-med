@@ -63,15 +63,4 @@ async def drop_tables():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
 
-async def get_db_optional() -> AsyncGenerator[Optional[AsyncSession], None]:
-    """
-    Dependency para obtener una sesión de base de datos async de forma opcional.
-    Si la BD no está disponible, devuelve None en lugar de fallar.
-    Útil para endpoints que pueden funcionar con o sin BD.
-    """
-    try:
-        async with AsyncSessionLocal() as session:
-            yield session
-    except Exception:
-        # Si hay error conectando a la BD, devolver None
-        yield None
+# Función duplicada eliminada - ya existe arriba en líneas 42-58

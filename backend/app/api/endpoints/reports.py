@@ -1,6 +1,6 @@
 # Fichero: backend/app/api/endpoints/reports.py
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends, Request
 import tempfile
 import os
 import pandas as pd
@@ -11,13 +11,20 @@ from app.services.report_generator import ReportGeneratorService
 from app.services.enhanced_report_service import EnhancedReportService
 from app.db.session import get_db_optional
 from app.db.models import User
+from app.core.rate_limiter import rate_limit
+from app.core.metrics import measure_execution_time, record_api_call
+from app.core.logging.config import get_logger
 # from app.auth.dependencies import get_current_user_optional
 import uuid
+import time
 
 router = APIRouter()
 
 @router.post("/generate", response_model=GeneratedReport, summary="Generar Informe Técnico desde Archivo")
+@rate_limit(max_requests=10, window_seconds=60)  # 10 requests por minuto
+@measure_execution_time("generate_report_endpoint")
 async def generate_report_endpoint(
+    request: Request,
     file: UploadFile = File(..., description="Archivo Excel (.xlsx, .xls) o CSV (.csv) con datos del contrato"),
     nombre_supervisor: Optional[str] = Form(None, description="Nombre del supervisor del proyecto"),
     nombre_proyecto: Optional[str] = Form(None, description="Nombre del proyecto"),
@@ -35,6 +42,11 @@ async def generate_report_endpoint(
     **Seguridad**: Este endpoint procesa archivos subidos directamente, evitando 
     riesgos de seguridad asociados con la descarga de archivos desde URLs externas.
     """
+    start_time = time.time()
+    logger = get_logger(__name__)
+    
+    logger.info(f"Starting report generation for file: {file.filename}")
+    
     # Verificar extensión del archivo
     if not file.filename:
         raise HTTPException(status_code=400, detail="Debe proporcionar un nombre de archivo")
@@ -113,11 +125,22 @@ async def generate_report_endpoint(
         if not report_sections:
             raise ValueError("No se pudieron generar secciones para el informe. Verifique los datos de entrada.")
 
+        # Registrar métricas y logging
+        execution_time = time.time() - start_time
+        logger.info(f"Report generation completed successfully in {execution_time:.2f}s")
+        record_api_call("/api/v1/reports/generate", "POST", 200, execution_time)
+        
         return GeneratedReport(sections=report_sections)
         
     except ValueError as e:
+        execution_time = time.time() - start_time
+        logger.error(f"Validation error in report generation: {e}")
+        record_api_call("/api/v1/reports/generate", "POST", 400, execution_time)
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        execution_time = time.time() - start_time
+        logger.error(f"Unexpected error in report generation: {e}")
+        record_api_call("/api/v1/reports/generate", "POST", 500, execution_time)
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {e}")
 
 @router.post("/generate-demo", response_model=GeneratedReport, summary="Generar Informe de Demostración")
