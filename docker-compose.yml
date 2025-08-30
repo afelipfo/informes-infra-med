@@ -1,68 +1,162 @@
+version: '3.8'
+
 services:
-  # Base de datos PostgreSQL
-  postgres:
-    image: postgres:15
-    container_name: informes-postgres
-    environment:
-      - POSTGRES_DB=informes_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+  # Backend API optimizado
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: runner
+    container_name: informes-backend
     ports:
-      - "5432:5432"
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - PYTHONUNBUFFERED=1
+      - PYTHONOPTIMIZE=1
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./backend/app:/app/app:ro
+      - backend_cache:/app/cache
+      - backend_logs:/app/logs
     networks:
       - informes-network
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
 
-  # Redis para cache
+  # Frontend optimizado
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: runner
+    container_name: informes-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      - frontend_cache:/app/.next/cache
+    networks:
+      - informes-network
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=50m
+
+  # Redis para cache (opcional, para futuras optimizaciones)
   redis:
     image: redis:7-alpine
     container_name: informes-redis
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
     networks:
       - informes-network
     restart: unless-stopped
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+    security_opt:
+      - no-new-privileges:true
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: informes-backend
+  # Nginx reverse proxy optimizado
+  nginx:
+    image: nginx:alpine
+    container_name: informes-nginx
     ports:
-      - "8000:8000"
-    environment:
-      - PROJECT_NAME=API de Generación de Informes - Infraestructura Medellín
-      - API_V1_STR=/api/v1
-      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/informes_db
-      - REDIS_URL=redis://redis:6379
-      - SECRET_KEY=your-super-secret-jwt-key-change-in-production
-    depends_on:
-      - postgres
-      - redis
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_logs:/var/log/nginx
     networks:
       - informes-network
     restart: unless-stopped
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: informes-frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
     depends_on:
+      - frontend
       - backend
-    networks:
-      - informes-network
-    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.25'
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=50m
+      - /var/cache/nginx:noexec,nosuid,size=100m
 
+# Volúmenes persistentes
+volumes:
+  backend_cache:
+    driver: local
+  backend_logs:
+    driver: local
+  frontend_cache:
+    driver: local
+  redis_data:
+    driver: local
+  nginx_logs:
+    driver: local
+
+# Red personalizada
 networks:
   informes-network:
     driver: bridge
-
-volumes:
-  postgres_data:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
