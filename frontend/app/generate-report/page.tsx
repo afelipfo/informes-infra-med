@@ -136,50 +136,67 @@ export default function GenerateReportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-500/20 to-orange-500/20 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 max-w-7xl mx-auto p-8">
         {/* Header */}
-        <div className="bg-white rounded-2xl p-8 mb-8 text-center shadow-lg">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Generador de Informes Técnicos
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6 animate-float">
+            <span className="text-2xl">📊</span>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent">
+            Generador de Informes
           </h1>
-          <p className="text-xl text-gray-600">
-            Sistema de Análisis de Infraestructura - Medellín
+          
+          <p className="text-xl text-blue-200 font-light">
+            Sistema de Análisis Inteligente - Medellín
           </p>
         </div>
 
         {/* Connection Status */}
         {connectionStatus && (
-          <div className={`p-4 rounded-lg mb-6 text-center ${
+          <div className={`p-4 rounded-2xl mb-8 text-center backdrop-blur-sm border ${
             connectionStatus.includes('✅') 
-              ? 'bg-green-100 text-green-800 border border-green-200' 
-              : 'bg-red-100 text-red-800 border border-red-200'
+              ? 'bg-green-500/20 text-green-200 border-green-400/30' 
+              : 'bg-red-500/20 text-red-200 border-red-400/30'
           }`}>
-            {connectionStatus}
+            <div className="flex items-center justify-center space-x-2">
+              <span className="text-2xl">{connectionStatus.includes('✅') ? '🟢' : '🔴'}</span>
+              <span className="text-lg">{connectionStatus}</span>
+            </div>
           </div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
           {/* File Upload Card */}
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              📁 Cargar Archivo
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Sube tu archivo Excel o CSV para generar el informe
-            </p>
+          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm rounded-3xl p-8 border border-blue-400/20 hover:border-blue-400/40 transition-all duration-300">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="text-3xl animate-bounce-slow">📁</div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Cargar Archivo</h2>
+                <p className="text-blue-200 text-sm">Excel o CSV con datos del contrato</p>
+              </div>
+            </div>
 
             <div
-              className="border-2 border-dashed border-blue-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-400 transition-colors"
+              className="border-2 border-dashed border-blue-400/50 rounded-2xl p-8 text-center cursor-pointer hover:border-blue-400 transition-all duration-300 hover:bg-blue-500/10 group"
               onDrop={handleDrop}
               onDragOver={(e) => e.preventDefault()}
               onClick={() => fileInputRef.current?.click()}
             >
-              <div className="text-4xl mb-4">📤</div>
-              <p className="text-gray-700 mb-2">
+              <div className="text-6xl mb-4 animate-float">📤</div>
+              <p className="text-white text-lg mb-2 group-hover:text-blue-200 transition-colors">
                 Arrastra y suelta tu archivo aquí
               </p>
-              <p className="text-gray-500 text-sm">
+              <p className="text-blue-300 text-sm">
                 o haz clic para seleccionar
               </p>
               <input
@@ -192,97 +209,162 @@ export default function GenerateReportPage() {
             </div>
 
             {file && (
-              <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                <p><strong>Archivo:</strong> {file.name}</p>
-                <p><strong>Tamaño:</strong> {(file.size / 1024).toFixed(1)} KB</p>
-                <p><strong>Tipo:</strong> {file.type}</p>
+              <div className="mt-6 p-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl border border-blue-400/30">
+                <div className="flex items-center space-x-3 mb-2">
+                  <span className="text-2xl">📄</span>
+                  <span className="text-white font-semibold">{file.name}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-sm text-blue-200">
+                  <div>
+                    <span className="font-semibold">Tamaño:</span> {(file.size / 1024).toFixed(1)} KB
+                  </div>
+                  <div>
+                    <span className="font-semibold">Tipo:</span> {file.type || 'Archivo'}
+                  </div>
+                </div>
               </div>
             )}
           </div>
 
           {/* Controls Card */}
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">
-              ⚙️ Acciones
-            </h2>
+          <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 backdrop-blur-sm rounded-3xl p-8 border border-emerald-400/20 hover:border-emerald-400/40 transition-all duration-300">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="text-3xl animate-pulse-slow">⚙️</div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Acciones</h2>
+                <p className="text-emerald-200 text-sm">Genera tu informe ahora</p>
+              </div>
+            </div>
 
-            <button
-              onClick={generateReport}
-              disabled={!file || isLoading}
-              className={`w-full mb-4 p-4 rounded-lg font-semibold text-white transition-colors ${
-                file && !isLoading
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-gray-400 cursor-not-allowed'
-              }`}
-            >
-              {isLoading ? '🔄 Generando...' : '⚡ Generar Informe'}
-            </button>
+            <div className="space-y-4">
+              <button
+                onClick={generateReport}
+                disabled={!file || isLoading}
+                className={`w-full p-6 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 ${
+                  file && !isLoading
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg hover:shadow-glow cursor-pointer'
+                    : 'bg-gray-600 cursor-not-allowed'
+                }`}
+              >
+                <div className="flex items-center justify-center space-x-3">
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin text-2xl">🔄</div>
+                      <span className="text-xl">Generando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-2xl animate-bounce-slow">⚡</div>
+                      <span className="text-xl">Generar Informe</span>
+                    </>
+                  )}
+                </div>
+              </button>
 
-            <button
-              onClick={runDemo}
-              disabled={isLoading}
-              className={`w-full p-4 rounded-lg font-semibold text-white transition-colors ${
-                isLoading
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-green-600 hover:bg-green-700 cursor-pointer'
-              }`}
-            >
-              {isLoading ? '🔄 Cargando...' : '🎯 Probar Demostración'}
-            </button>
+              <button
+                onClick={runDemo}
+                disabled={isLoading}
+                className={`w-full p-6 rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-105 ${
+                  isLoading
+                    ? 'bg-gray-600 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg hover:shadow-glow cursor-pointer'
+                }`}
+              >
+                <div className="flex items-center justify-center space-x-3">
+                  {isLoading ? (
+                    <>
+                      <div className="animate-spin text-2xl">🔄</div>
+                      <span className="text-xl">Cargando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-2xl animate-pulse-slow">🎯</div>
+                      <span className="text-xl">Probar Demostración</span>
+                    </>
+                  )}
+                </div>
+              </button>
+            </div>
 
-            <div className="mt-4 p-4 bg-yellow-50 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                <strong>💡 Tip:</strong> Usa la demostración para probar el sistema sin cargar archivos
-              </p>
+            <div className="mt-6 p-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-2xl border border-yellow-400/30">
+              <div className="flex items-center space-x-3">
+                <span className="text-2xl">💡</span>
+                <p className="text-yellow-200 text-sm">
+                  <strong>Tip:</strong> Usa la demostración para probar el sistema sin cargar archivos
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Messages */}
         {error && (
-          <div className="bg-red-100 border border-red-200 text-red-800 p-4 rounded-lg mb-6">
-            ❌ {error}
+          <div className="bg-gradient-to-r from-red-500/20 to-pink-500/20 backdrop-blur-sm border border-red-400/30 text-red-200 p-6 rounded-2xl mb-8">
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">❌</span>
+              <span className="text-lg">{error}</span>
+            </div>
           </div>
         )}
 
         {success && (
-          <div className="bg-green-100 border border-green-200 text-green-800 p-4 rounded-lg mb-6">
-            ✅ {success}
+          <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm border border-green-400/30 text-green-200 p-6 rounded-2xl mb-8">
+            <div className="flex items-center space-x-3">
+              <span className="text-2xl">✅</span>
+              <span className="text-lg">{success}</span>
+            </div>
           </div>
         )}
 
         {/* Results */}
         {result && (
-          <div className="bg-white rounded-xl p-6 shadow-lg">
-            <h3 className="text-2xl font-bold text-blue-600 mb-4">
-              📊 Resultado del Informe
-            </h3>
-            
-            {result.sections?.map((section: any, index: number) => (
-              <div key={index} className="mb-6 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                <h4 className="text-lg font-semibold text-blue-700 mb-2">
-                  {section.title}
-                </h4>
-                <div className="bg-white p-3 rounded border">
-                  <pre className="text-sm text-gray-700 whitespace-pre-wrap overflow-x-auto">
-                    {JSON.stringify(section.data, null, 2)}
-                  </pre>
-                </div>
-                {section.message && (
-                  <div className={`mt-3 p-3 rounded ${
-                    section.message.severity === 'CRITICAL' ? 'bg-red-100 text-red-800' :
-                    section.message.severity === 'WARNING' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-blue-100 text-blue-800'
-                  }`}>
-                    <strong>{section.message.severity}:</strong> {section.message.message}
-                  </div>
-                )}
+          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm rounded-3xl p-8 border border-blue-400/20">
+            <div className="flex items-center space-x-4 mb-8">
+              <div className="text-4xl animate-float">📊</div>
+              <div>
+                <h3 className="text-3xl font-bold text-white">Resultado del Informe</h3>
+                <p className="text-blue-200">Análisis técnico completo generado</p>
               </div>
-            ))}
+            </div>
+            
+            <div className="space-y-6">
+              {result.sections?.map((section: any, index: number) => (
+                <div key={index} className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl p-6 border border-blue-400/30">
+                  <h4 className="text-xl font-bold text-white mb-4 flex items-center space-x-3">
+                    <span className="text-2xl">📋</span>
+                    <span>{section.title}</span>
+                  </h4>
+                  
+                  <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-600/50 mb-4">
+                    <pre className="text-sm text-gray-300 whitespace-pre-wrap overflow-x-auto">
+                      {JSON.stringify(section.data, null, 2)}
+                    </pre>
+                  </div>
+                  
+                  {section.message && (
+                    <div className={`p-4 rounded-xl border ${
+                      section.message.severity === 'CRITICAL' ? 'bg-red-500/20 border-red-400/30 text-red-200' :
+                      section.message.severity === 'WARNING' ? 'bg-yellow-500/20 border-yellow-400/30 text-yellow-200' :
+                      'bg-blue-500/20 border-blue-400/30 text-blue-200'
+                    }`}>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-xl">
+                          {section.message.severity === 'CRITICAL' ? '🚨' :
+                           section.message.severity === 'WARNING' ? '⚠️' : 'ℹ️'}
+                        </span>
+                        <div>
+                          <strong>{section.message.severity}:</strong> {section.message.message}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <button
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-glow"
                 onClick={() => {
                   const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' })
                   const url = URL.createObjectURL(blob)
@@ -293,27 +375,37 @@ export default function GenerateReportPage() {
                   URL.revokeObjectURL(url)
                 }}
               >
-                📥 Descargar JSON
+                <div className="flex items-center justify-center space-x-3">
+                  <span className="text-xl">📥</span>
+                  <span>Descargar JSON</span>
+                </div>
               </button>
 
               <button
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+                className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-glow"
                 onClick={() => {
                   setResult(null)
                   setSuccess('')
                   setError('')
                 }}
               >
-                🔄 Nuevo Informe
+                <div className="flex items-center justify-center space-x-3">
+                  <span className="text-xl">🔄</span>
+                  <span>Nuevo Informe</span>
+                </div>
               </button>
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <div className="text-center py-8 text-gray-600">
-          <p>&copy; 2025 Secretaría de Infraestructura Física - Alcaldía de Medellín</p>
-          <p className="text-sm mt-2">Sistema de Generación de Informes Técnicos con IA</p>
+        <div className="text-center mt-16">
+          <div className="inline-flex items-center space-x-4 px-8 py-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-sm rounded-full border border-blue-400/30">
+            <span className="text-blue-200">🏛️</span>
+            <span className="text-blue-200">Secretaría de Infraestructura Física - Alcaldía de Medellín</span>
+            <span className="text-blue-200">🏛️</span>
+          </div>
+          <p className="text-gray-400 text-sm mt-4">Sistema de Generación de Informes Técnicos con IA Avanzada</p>
         </div>
       </div>
     </div>
