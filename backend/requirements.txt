@@ -6,5 +6,29 @@ pandas
 openpyxl # Necesario para que Pandas lea .xlsx
 python-dotenv
 python-multipart # Para procesar archivos subidos (File y UploadFile)
+
+# Base de datos
+sqlalchemy[asyncio]
+asyncpg # PostgreSQL async driver
+alembic # Migraciones de base de datos
+
+# Autenticación y seguridad
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+
+# Testing
+pytest
+pytest-asyncio
+httpx # Para tests async
+
+# Logging y monitoreo
+structlog
+python-json-logger
+
 # Para generar PDF, podríamos usar:
 weasyprint
+
+# Cache
+redis
+aioredis

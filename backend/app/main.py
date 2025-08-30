@@ -29,3 +29,8 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 def read_root():
     """Endpoint raíz para verificar que la API está funcionando."""
     return {"status": "OK", "message": f"Bienvenido a {settings.PROJECT_NAME}"}
+
+@app.get("/health", tags=["Health"])
+def health_check():
+    """Endpoint de health check para monitoreo."""
+    return {"status": "healthy", "service": "informes-api"}

@@ -1,12 +1,18 @@
 # Fichero: backend/app/api/endpoints/reports.py
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 import tempfile
 import os
 import pandas as pd
 from typing import Optional
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.report import GeneratedReport
 from app.services.report_generator import ReportGeneratorService
+from app.services.enhanced_report_service import EnhancedReportService
+from app.db.session import get_db_optional
+from app.db.models import User
+from app.auth.dependencies import get_current_user_optional
+import uuid
 
 router = APIRouter()
 
@@ -14,7 +20,9 @@ router = APIRouter()
 async def generate_report_endpoint(
     file: UploadFile = File(..., description="Archivo Excel (.xlsx, .xls) o CSV (.csv) con datos del contrato"),
     nombre_supervisor: Optional[str] = Form(None, description="Nombre del supervisor del proyecto"),
-    nombre_proyecto: Optional[str] = Form(None, description="Nombre del proyecto")
+    nombre_proyecto: Optional[str] = Form(None, description="Nombre del proyecto"),
+    db: Optional[AsyncSession] = Depends(get_db_optional),
+    current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
     Endpoint principal para la generación de informes.
@@ -22,6 +30,7 @@ async def generate_report_endpoint(
     - **Recibe**: Un archivo Excel (.xlsx, .xls) o CSV (.csv) con datos del contrato.
     - **Procesa**: Valida, extrae y analiza los datos según las reglas de negocio.
     - **Devuelve**: Un informe estructurado en formato JSON con mensajes técnicos.
+    - **Guarda**: El informe en base de datos para análisis histórico.
     
     **Seguridad**: Este endpoint procesa archivos subidos directamente, evitando 
     riesgos de seguridad asociados con la descarga de archivos desde URLs externas.
@@ -79,7 +88,25 @@ async def generate_report_endpoint(
             if os.path.exists(temp_file_path):
                 os.unlink(temp_file_path)
         
-        # Generar el informe
+        # Usar el servicio mejorado para generar y guardar el informe si hay BD disponible
+        if db is not None:
+            enhanced_service = EnhancedReportService(db)
+            
+            try:
+                report = await enhanced_service.generate_and_save_report(
+                    contract_data=contract_data,
+                    user_id=current_user.id if current_user else None,
+                    original_filename=file.filename,
+                    file_type=file_ext,
+                    supervisor_name=nombre_supervisor,
+                    project_name=nombre_proyecto
+                )
+                return report
+            except Exception as db_error:
+                # Si falla el servicio mejorado, usar fallback
+                pass
+        
+        # Fallback: usar el servicio original (sin BD)
         generator = ReportGeneratorService(data=contract_data)
         report_sections = generator.generate_full_report()
 

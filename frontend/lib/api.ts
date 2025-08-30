@@ -17,7 +17,9 @@ export interface GeneratedReport {
   sections: ReportSection[];
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+console.log('API_BASE_URL:', API_BASE_URL); // Debug temporal
 
 export async function generateDemoReport(): Promise<GeneratedReport> {
   const response = await fetch(`${API_BASE_URL}/api/v1/reports/generate-demo`, {

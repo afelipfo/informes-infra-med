@@ -1,4 +1,30 @@
 services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: informes-postgres
+    environment:
+      - POSTGRES_DB=informes_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - informes-network
+    restart: unless-stopped
+
+  # Redis para cache
+  redis:
+    image: redis:7-alpine
+    container_name: informes-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - informes-network
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -9,6 +35,12 @@ services:
     environment:
       - PROJECT_NAME=API de Generación de Informes - Infraestructura Medellín
       - API_V1_STR=/api/v1
+      - DATABASE_URL=postgresql+asyncpg://postgres:password@postgres:5432/informes_db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-super-secret-jwt-key-change-in-production
+    depends_on:
+      - postgres
+      - redis
     networks:
       - informes-network
     restart: unless-stopped
@@ -31,3 +63,6 @@ services:
 networks:
   informes-network:
     driver: bridge
+
+volumes:
+  postgres_data:
