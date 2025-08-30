@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     """
     Configuraciones de la aplicación, cargadas desde el archivo .env.
     """
-    PROJECT_NAME: str
+    PROJECT_NAME: str = "API de Generación de Informes - Infraestructura Medellín"
     API_V1_STR: str = "/api/v1"
     
     # Base de datos

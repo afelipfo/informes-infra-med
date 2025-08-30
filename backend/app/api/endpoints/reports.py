@@ -11,7 +11,7 @@ from app.services.report_generator import ReportGeneratorService
 from app.services.enhanced_report_service import EnhancedReportService
 from app.db.session import get_db_optional
 from app.db.models import User
-from app.auth.dependencies import get_current_user_optional
+# from app.auth.dependencies import get_current_user_optional
 import uuid
 
 router = APIRouter()
@@ -22,7 +22,7 @@ async def generate_report_endpoint(
     nombre_supervisor: Optional[str] = Form(None, description="Nombre del supervisor del proyecto"),
     nombre_proyecto: Optional[str] = Form(None, description="Nombre del proyecto"),
     db: Optional[AsyncSession] = Depends(get_db_optional),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    # current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
     Endpoint principal para la generación de informes.
@@ -95,7 +95,7 @@ async def generate_report_endpoint(
             try:
                 report = await enhanced_service.generate_and_save_report(
                     contract_data=contract_data,
-                    user_id=current_user.id if current_user else None,
+                    user_id=None,  # current_user.id if current_user else None,
                     original_filename=file.filename,
                     file_type=file_ext,
                     supervisor_name=nombre_supervisor,

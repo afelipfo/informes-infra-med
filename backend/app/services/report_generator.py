@@ -51,7 +51,14 @@ class ReportGeneratorService:
         try:
             # La fecha actual está fija al contexto del prompt para consistencia
             today = datetime.date(2025, 8, 27)
-            fecha_fin = pd.to_datetime(self.data.get('fecha_fin_planificada')).date()
+            fecha_fin_str = self.data.get('fecha_fin_planificada')
+            
+            # Manejar caso donde no hay fecha de fin planificada
+            if not fecha_fin_str:
+                fecha_fin = datetime.date(2025, 12, 31)  # Fecha por defecto
+            else:
+                fecha_fin = pd.to_datetime(fecha_fin_str).date()
+                
             avance = float(self.data.get('porcentaje_avance_fisico', 0))
             
             dias_restantes = (fecha_fin - today).days

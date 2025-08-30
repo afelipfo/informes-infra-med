@@ -38,6 +38,17 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         finally:
             await session.close()
 
+async def get_db_optional() -> AsyncGenerator[Optional[AsyncSession], None]:
+    """
+    Dependency opcional para obtener una sesión de base de datos async.
+    Retorna None si la base de datos no está disponible.
+    """
+    try:
+        async with AsyncSessionLocal() as session:
+            yield session
+    except Exception:
+        yield None
+
 async def create_tables():
     """Crear todas las tablas en la base de datos"""
     async with engine.begin() as conn:
