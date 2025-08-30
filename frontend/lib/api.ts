@@ -33,11 +33,19 @@ export async function generateDemoReport(): Promise<GeneratedReport> {
   return response.json();
 }
 
-export async function generateReportFromFile(file: File): Promise<GeneratedReport> {
+export async function generateReportFromFile(file: File, supervisorName?: string, projectName?: string): Promise<GeneratedReport> {
   const formData = new FormData();
   formData.append('file', file);
+  
+  if (supervisorName) {
+    formData.append('nombre_supervisor', supervisorName);
+  }
+  
+  if (projectName) {
+    formData.append('nombre_proyecto', projectName);
+  }
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/reports/generate-from-file`, {
+  const response = await fetch(`${API_BASE_URL}/api/v1/reports/generate`, {
     method: 'POST',
     body: formData,
   });

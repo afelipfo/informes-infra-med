@@ -1,10 +1,10 @@
-from pydantic import BaseModel, HttpUrl
-from typing import List
+from pydantic import BaseModel
+from typing import List, Optional
 
 class ReportRequest(BaseModel):
-    excel_api_url: HttpUrl
-    # Podríamos añadir más metadata si fuera necesario
-    # nombre_supervisor: str
+    # Metadata opcional para el informe
+    nombre_supervisor: Optional[str] = None
+    nombre_proyecto: Optional[str] = None
 
 class TechnicalMessage(BaseModel):
     block_name: str
