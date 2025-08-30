@@ -166,12 +166,18 @@ class ContractIntelligenceEngine:
         process = psutil.Process()
         return process.memory_info().rss / 1024 / 1024  # MB
     
-    async def analyze_contract_data(self, data: pd.DataFrame) -> AIAnalysisResult:
+    async def analyze_contract_data(self, data) -> AIAnalysisResult:
         """
         Análisis principal de datos de contrato con optimizaciones
         """
         start_time = time.time()
         initial_memory = self._get_memory_usage()
+        
+        # Convertir diccionario a DataFrame si es necesario
+        if isinstance(data, dict):
+            data = pd.DataFrame([data])
+        elif not isinstance(data, pd.DataFrame):
+            raise ValueError("Los datos deben ser un diccionario o un DataFrame")
         
         # Crear hash de datos para cache
         data_hash = hash(data.to_string())

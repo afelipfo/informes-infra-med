@@ -6,7 +6,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-      target: runner
     container_name: informes-backend
     ports:
       - "8000:8000"
@@ -46,7 +45,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: runner
     container_name: informes-frontend
     ports:
       - "3000:3000"
@@ -135,10 +133,10 @@ services:
           cpus: '0.25'
     security_opt:
       - no-new-privileges:true
-    read_only: true
     tmpfs:
       - /tmp:noexec,nosuid,size=50m
       - /var/cache/nginx:noexec,nosuid,size=100m
+      - /run:noexec,nosuid,size=10m
 
 # Volúmenes persistentes
 volumes:

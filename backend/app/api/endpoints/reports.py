@@ -193,7 +193,7 @@ async def generate_report_endpoint(
         
         # Usar el servicio inteligente de IA
         intelligent_service = IntelligentReportService()
-        report = intelligent_service.generate_intelligent_report(contract_data)
+        report = await intelligent_service.generate_intelligent_report(contract_data)
 
         # Registrar métricas y logging
         execution_time = time.time() - start_time
@@ -214,7 +214,7 @@ async def generate_report_endpoint(
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {e}")
 
 @router.post("/generate-demo", response_model=GeneratedReport, summary="Generar Informe de Demostración")
-def generate_demo_report():
+async def generate_demo_report():
     """
     Endpoint de demostración que genera un informe con datos de ejemplo.
     Útil para probar la funcionalidad sin necesidad de un archivo Excel externo.
@@ -229,7 +229,7 @@ def generate_demo_report():
     
     try:
         intelligent_service = IntelligentReportService()
-        report = intelligent_service.generate_intelligent_report(demo_data)
+        report = await intelligent_service.generate_intelligent_report(demo_data)
 
         return report
     
@@ -285,7 +285,7 @@ async def ai_analysis_endpoint(
         
         # Análisis directo con el motor de IA
         ai_engine = ContractIntelligenceEngine()
-        ai_analysis = ai_engine.analyze_contract_data(contract_data)
+        ai_analysis = await ai_engine.analyze_contract_data(contract_data)
         
         # Preparar respuesta detallada
         response = {

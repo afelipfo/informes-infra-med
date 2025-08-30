@@ -31,13 +31,16 @@ class Settings(BaseSettings):
     # Configuración de archivos
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB
     ALLOWED_FILE_EXTENSIONS: List[str] = [".csv", ".xlsx", ".xls"]
+    UPLOAD_DIR: str = "uploads"
     
     # Logging
     LOG_LEVEL: str = "INFO"
+    LOG_FORMAT: str = "json"
     
     # CORS
     FRONTEND_URL: str = "http://localhost:3000"
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
+    CORS_ORIGINS: str = '["http://localhost:3000", "http://127.0.0.1:3000"]'
     
     # Rate Limiting
     RATE_LIMIT_ENABLED: bool = False

@@ -23,14 +23,14 @@ class IntelligentReportService:
         self.report_generator = None
         logger.info("🚀 Servicio Inteligente de Informes inicializado")
     
-    def generate_intelligent_report(self, contract_data: Dict[str, Any]) -> GeneratedReport:
+    async def generate_intelligent_report(self, contract_data: Dict[str, Any]) -> GeneratedReport:
         """
         Genera un informe inteligente combinando análisis tradicional e IA
         """
         logger.info("🔍 Iniciando generación de informe inteligente")
         
         # 1. Análisis de IA
-        ai_analysis = self.ai_engine.analyze_contract_data(contract_data)
+        ai_analysis = await self.ai_engine.analyze_contract_data(contract_data)
         
         # 2. Generar informe base
         self.report_generator = ReportGeneratorService(data=contract_data)
