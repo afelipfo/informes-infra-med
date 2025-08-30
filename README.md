@@ -26,10 +26,7 @@ Sistema web para la generación automática de informes técnicos para contratos
 git clone <tu-repo-url>
 cd informes-infra-med
 
-# 2. Configurar proyecto automáticamente
-python scripts/setup.py
-
-# 3. Crear archivos de entorno
+# 2. Crear archivos de entorno
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env.local
 ```
@@ -136,8 +133,29 @@ El archivo Excel debe contener las siguientes columnas obligatorias:
 
 #### Backend (`backend/.env`)
 ```env
+# Configuración del Proyecto
 PROJECT_NAME="API de Generación de Informes - Infraestructura Medellín"
 API_V1_STR="/api/v1"
+ENVIRONMENT="development"
+
+# Base de Datos PostgreSQL (opcional)
+DATABASE_URL="postgresql+asyncpg://postgres:password@localhost:5432/informes_db"
+
+# Autenticación JWT (opcional)
+SECRET_KEY="your-super-secret-jwt-key-change-in-production"
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+# Redis para Cache (opcional)
+REDIS_URL="redis://localhost:6379"
+REDIS_ENABLED=true
+
+# Configuración de archivos
+MAX_FILE_SIZE=10485760  # 10MB
+ALLOWED_FILE_EXTENSIONS=[".csv", ".xlsx", ".xls"]
+
+# Logging
+LOG_LEVEL=INFO
 ```
 
 #### Frontend (`frontend/.env.local`)
@@ -162,20 +180,33 @@ informes-infra-med/
 │   ├── components/            # Componentes React
 │   ├── lib/                   # Utilidades y API client
 │   └── Dockerfile
-└── docker-compose.yml         # Orquestación de servicios
+├── data/                       # Datos de ejemplo
+│   ├── ejemplo_contrato.csv   # Archivo de datos de prueba
+│   └── README.md              # Documentación de datos
+├── test_system.py             # Script de pruebas unificado
+├── start-dev.py               # Script de inicio multiplataforma
+├── docker-compose.yml         # Orquestación de servicios
+└── README.md                  # Documentación principal
 ```
 
 ## 📝 API Endpoints
 
 ### POST `/api/v1/reports/generate`
-Genera un informe técnico basado en los datos del Excel.
+Genera un informe técnico basado en los datos del archivo subido.
 
-**Request Body:**
-```json
-{
-  "excel_api_url": "https://ejemplo.com/api/datos_contrato.xlsx"
-}
-```
+**Request:** `multipart/form-data`
+- `file`: Archivo Excel (.xlsx, .xls) o CSV (.csv)
+- `nombre_supervisor` (opcional): Nombre del supervisor
+- `nombre_proyecto` (opcional): Nombre del proyecto
+
+### POST `/api/v1/reports/generate-simple`
+Endpoint simplificado para pruebas rápidas.
+
+### POST `/api/v1/reports/generate-demo`
+Genera un informe de demostración con datos de ejemplo.
+
+### GET `/api/v1/health/detailed`
+Health check detallado del sistema.
 
 **Response:**
 ```json
@@ -200,6 +231,41 @@ Genera un informe técnico basado en los datos del Excel.
   ]
 }
 ```
+
+## 🛡️ Seguridad
+
+### Características de Seguridad Implementadas
+
+- ✅ **Validación de archivos**: Verificación de MIME types y extensiones permitidas
+- ✅ **Límites de tamaño**: Control de tamaño máximo de archivos subidos
+- ✅ **Rate limiting**: Protección contra abuso de la API
+- ✅ **Sanitización de datos**: Limpieza de datos de entrada
+- ✅ **Logging estructurado**: Registro detallado de operaciones
+- ✅ **Headers de seguridad**: Configuración de seguridad en respuestas HTTP
+
+### Mejoras de Seguridad
+
+- **Eliminación de SSRF**: El sistema ya no descarga archivos desde URLs externas
+- **Upload directo**: Los archivos se suben directamente al servidor
+- **Validación estricta**: Verificación de tipos de archivo y contenido
+- **Manejo seguro de errores**: No exposición de información sensible
+
+## 🚀 Características Avanzadas
+
+### Sistema de Monitoreo
+- **Health checks**: Verificación de estado del sistema
+- **Métricas de rendimiento**: Monitoreo de tiempo de respuesta
+- **Logging estructurado**: Registros en formato JSON para análisis
+
+### Optimizaciones de Rendimiento
+- **Cache con Redis**: Almacenamiento en caché de resultados
+- **Procesamiento asíncrono**: Manejo eficiente de múltiples requests
+- **Validación optimizada**: Verificación rápida de archivos
+
+### Escalabilidad
+- **Containerización**: Docker para despliegue consistente
+- **Arquitectura modular**: Separación clara de responsabilidades
+- **Configuración flexible**: Variables de entorno para diferentes entornos
 
 ## 🤝 Contribución
 
