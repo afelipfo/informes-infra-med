@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Informes | Infraestructura Física</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+        }
+
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+            40%, 43% { transform: translate3d(0, -30px, 0); }
+            70% { transform: translate3d(0, -15px, 0); }
+            90% { transform: translate3d(0, -4px, 0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .background-blobs {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            filter: blur(48px);
+            animation: blob 7s infinite;
+        }
+
+        .blob-1 {
+            top: -160px;
+            right: -160px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+        }
+
+        .blob-2 {
+            bottom: -160px;
+            left: -160px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, rgba(251, 146, 60, 0.2) 100%);
+            animation-delay: 2s;
+        }
+
+        .blob-3 {
+            top: 160px;
+            left: 160px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            animation-delay: 4s;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 1rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-icon span {
+            font-size: 3rem;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffffff 0%, #dbeafe 50%, #f3e8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: #bfdbfe;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 9999px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .hero-badge span {
+            color: #bfdbfe;
+            font-size: 1.125rem;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: #d1d5db;
+            max-width: 64rem;
+            margin: 3rem auto 0;
+            line-height: 1.75;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .gradient-text-2 {
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5rem;
+        }
+
+        .action-button {
+            position: relative;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            transform: scale(1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        .action-button.primary {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        }
+
+        .action-button.primary:hover {
+            box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+        }
+
+        .action-button.secondary {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+        }
+
+        .action-button.secondary:hover {
+            box-shadow: 0 0 40px rgba(5, 150, 105, 0.6);
+        }
+
+        .action-button-icon {
+            font-size: 3rem;
+        }
+
+        .action-button-icon.bounce {
+            animation: bounce 2s infinite;
+        }
+
+        .action-button-icon.pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .action-button-text {
+            text-align: left;
+        }
+
+        .action-button-title {
+            color: white;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        .action-button-subtitle {
+            font-size: 0.875rem;
+        }
+
+        .action-button.primary .action-button-subtitle {
+            color: #dbeafe;
+        }
+
+        .action-button.secondary .action-button-subtitle {
+            color: #a7f3d0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: scale(1.05);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .feature-card.purple {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+            border-color: rgba(147, 51, 234, 0.2);
+        }
+
+        .feature-card.purple:hover {
+            border-color: rgba(147, 51, 234, 0.4);
+        }
+
+        .feature-card.green {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.1) 0%, rgba(13, 148, 136, 0.1) 100%);
+            border-color: rgba(5, 150, 105, 0.2);
+        }
+
+        .feature-card.green:hover {
+            border-color: rgba(5, 150, 105, 0.4);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .feature-icon.delay-2 {
+            animation-delay: 2s;
+        }
+
+        .feature-icon.delay-4 {
+            animation-delay: 4s;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .feature-description {
+            color: #d1d5db;
+            line-height: 1.75;
+        }
+
+        .status-indicators {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        .status-indicator.green {
+            background-color: #10b981;
+        }
+
+        .status-indicator.yellow {
+            background-color: #f59e0b;
+            animation-delay: 1s;
+        }
+
+        .status-indicator.red {
+            background-color: #ef4444;
+            animation-delay: 2s;
+        }
+
+        .feature-animation {
+            margin-top: 1rem;
+            font-size: 2rem;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .stats-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value.cyan {
+            color: #22d3ee;
+        }
+
+        .stat-value.purple {
+            color: #a855f7;
+        }
+
+        .stat-value.pink {
+            color: #ec4899;
+        }
+
+        .stat-value.green {
+            color: #10b981;
+        }
+
+        .stat-label {
+            color: #d1d5db;
+            font-size: 0.875rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+            backdrop-filter: blur(8px);
+            border-radius: 9999px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .footer-badge span {
+            color: #bfdbfe;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            .action-buttons {
+                gap: 1rem;
+            }
+            
+            .action-button {
+                min-width: 280px;
+                padding: 1rem 1.5rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Blobs -->
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-icon">
+                <span>🏗️</span>
+            </div>
+            
+            <h1 class="hero-title">Sistema de Informes</h1>
+            
+            <h2 class="hero-subtitle">Secretaría de Infraestructura Física</h2>
+            
+            <div class="hero-badge">
+                <span>🏛️ Alcaldía de Medellín</span>
+            </div>
+            
+            <p class="hero-description">
+                Genera informes técnicos automáticos para contratos de Urgencia Manifiesta con 
+                <span class="gradient-text">análisis inteligente</span> y 
+                <span class="gradient-text-2">resultados instantáneos</span>.
+            </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="/generate-report" class="action-button primary">
+                <div class="action-button-icon bounce">📊</div>
+                <div class="action-button-text">
+                    <div class="action-button-title">Generar Nuevo Informe</div>
+                    <div class="action-button-subtitle">Análisis automático de datos</div>
+                </div>
+            </a>
+            
+            <a href="/reports" class="action-button secondary">
+                <div class="action-button-icon pulse">📋</div>
+                <div class="action-button-text">
+                    <div class="action-button-title">Ver Informes Anteriores</div>
+                    <div class="action-button-subtitle">Historial y análisis</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">Análisis Inteligente</h3>
+                <p class="feature-description">
+                    Procesamiento automático con <span class="gradient-text">IA avanzada</span> que detecta patrones y genera alertas por severidad en tiempo real.
+                </p>
+                <div class="status-indicators">
+                    <div class="status-indicator green"></div>
+                    <div class="status-indicator yellow"></div>
+                    <div class="status-indicator red"></div>
+                </div>
+            </div>
+            
+            <div class="feature-card purple">
+                <div class="feature-icon delay-2">⚡</div>
+                <h3 class="feature-title">Resultados Instantáneos</h3>
+                <p class="feature-description">
+                    Obtén informes técnicos completos en <span class="gradient-text-2">segundos</span> con análisis presupuestal, cronograma y recomendaciones detalladas.
+                </p>
+                <div class="feature-animation" style="animation: spin 3s linear infinite;">🔄</div>
+            </div>
+            
+            <div class="feature-card green">
+                <div class="feature-icon delay-4">🔒</div>
+                <h3 class="feature-title">Seguro y Confiable</h3>
+                <p class="feature-description">
+                    Procesamiento <span style="color: #10b981; font-weight: 600;">100% local</span> sin comprometer la seguridad de tus datos. Cumple con estándares de gobierno.
+                </p>
+                <div class="feature-animation" style="animation: pulse 2s infinite;">🛡️</div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <h3 class="stats-title">📈 Estadísticas del Sistema</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value cyan">99.9%</div>
+                    <div class="stat-label">Precisión</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value purple">&lt;2s</div>
+                    <div class="stat-label">Tiempo de Respuesta</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value pink">24/7</div>
+                    <div class="stat-label">Disponibilidad</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value green">100%</div>
+                    <div class="stat-label">Seguro</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-badge">
+                <span>🚀</span>
+                <span>Powered by Advanced AI Technology</span>
+                <span>🚀</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Efectos de hover para los botones
+        document.querySelectorAll('.action-button').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05) translateY(-8px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Efectos de hover para las cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

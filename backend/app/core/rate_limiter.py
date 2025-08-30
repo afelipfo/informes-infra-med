@@ -115,7 +115,25 @@ rate_limiter = RateLimiter()
 def rate_limit(max_requests: int = 100, window_seconds: int = 60):
     """Decorador para aplicar rate limiting a endpoints"""
     def decorator(func):
-        async def wrapper(request: Request, *args, **kwargs):
+        async def wrapper(*args, **kwargs):
+            # Buscar el objeto Request en los argumentos
+            request = None
+            for arg in args:
+                if hasattr(arg, 'headers') and hasattr(arg, 'client'):
+                    request = arg
+                    break
+            
+            if not request:
+                for value in kwargs.values():
+                    if hasattr(value, 'headers') and hasattr(value, 'client'):
+                        request = value
+                        break
+            
+            if not request:
+                # Si no encontramos Request, permitir la ejecución
+                logger.warning("Rate limit decorator: Request object not found, allowing execution")
+                return await func(*args, **kwargs)
+            
             allowed, rate_limit_info = await rate_limiter.check_rate_limit(
                 request, max_requests, window_seconds
             )
@@ -129,8 +147,10 @@ def rate_limit(max_requests: int = 100, window_seconds: int = 60):
                     }
                 )
             
-            # Agregar headers de rate limit
-            response = await func(request, *args, **kwargs)
+            # Ejecutar la función original
+            response = await func(*args, **kwargs)
+            
+            # Agregar headers de rate limit si es posible
             if hasattr(response, 'headers'):
                 response.headers["X-RateLimit-Limit"] = str(max_requests)
                 response.headers["X-RateLimit-Remaining"] = str(rate_limit_info["remaining"])

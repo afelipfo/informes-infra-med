@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     # Redis para cache
     REDIS_URL: str = "redis://localhost:6379"
     REDIS_ENABLED: bool = True
+    REDIS_TTL: int = 3600
     
     # Configuración de archivos
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB
