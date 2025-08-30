@@ -17,45 +17,40 @@ export interface GeneratedReport {
   sections: ReportSection[];
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Configuración de la API para diferentes entornos
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://tu-app.railway.app/api/v1'  // Cambia esto por tu URL de Railway
+  : 'http://localhost:8000/api/v1';
 
-console.log('API_BASE_URL:', API_BASE_URL); // Debug temporal
-
-export async function generateDemoReport(): Promise<GeneratedReport> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/reports/generate-demo`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || 'Ocurrió un error desconocido en el servidor.');
-  }
-
-  return response.json();
-}
-
-export async function generateReportFromFile(file: File, supervisorName?: string, projectName?: string): Promise<GeneratedReport> {
-  const formData = new FormData();
-  formData.append('file', file);
+export const api = {
+  baseURL: API_BASE_URL,
   
-  if (supervisorName) {
-    formData.append('nombre_supervisor', supervisorName);
-  }
+  // Función para hacer requests
+  async request(endpoint: string, options: RequestInit = {}) {
+    const url = `${this.baseURL}${endpoint}`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
+    
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+    
+    return response.json();
+  },
+
+  // Endpoints específicos
+  health: () => api.request('/health'),
+  generateReport: (data: FormData) => {
+    return fetch(`${api.baseURL}/reports/generate`, {
+      method: 'POST',
+      body: data,
+    });
+  },
   
-  if (projectName) {
-    formData.append('nombre_proyecto', projectName);
-  }
-
-  const response = await fetch(`${API_BASE_URL}/api/v1/reports/generate`, {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || 'Ocurrió un error desconocido en el servidor.');
-  }
-
-  return response.json();
-}
+  getReports: () => api.request('/reports'),
+};

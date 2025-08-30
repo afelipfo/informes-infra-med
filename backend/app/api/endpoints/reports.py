@@ -8,7 +8,6 @@ from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.report import GeneratedReport
 from app.services.report_generator import ReportGeneratorService
-from app.services.enhanced_report_service import EnhancedReportService
 from app.services.intelligent_report_service import IntelligentReportService
 from app.services.ai_intelligence_engine import ContractIntelligenceEngine
 from app.db.session import get_db_optional
@@ -175,7 +174,7 @@ async def generate_report_endpoint(
         
         # Usar el servicio mejorado para generar y guardar el informe si hay BD disponible
         # if db is not None:  # DESHABILITADO TEMPORALMENTE
-        #     enhanced_service = EnhancedReportService(db)
+        #     intelligent_service = IntelligentReportService()
         #     
         #     try:
         #         report = await enhanced_service.generate_and_save_report(

@@ -1,16 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configuración estable para producción
+  output: 'export',
+  trailingSlash: true,
   images: {
-    domains: ['localhost'],
+    unoptimized: true
   },
-  // Solo ignorar errores en desarrollo
-  eslint: {
-    ignoreDuringBuilds: process.env.NODE_ENV === 'development',
-  },
-  typescript: {
-    ignoreBuildErrors: process.env.NODE_ENV === 'development',
-  },
+  // Configuración para GitHub Pages
+  basePath: process.env.NODE_ENV === 'production' ? '/informes-infra-med' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/informes-infra-med/' : '',
 }
 
 module.exports = nextConfig

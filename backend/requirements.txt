@@ -28,15 +28,12 @@ pytest==7.4.3
 pytest-asyncio==0.21.1
 httpx==0.27.0
 
-# PDF Generation (opcional)
-# weasyprint==61.2
+# Cache (opcional para futuras optimizaciones)
+# redis==5.0.1
+# aioredis==2.0.1
 
-# Cache
-redis==5.0.1
-aioredis==2.0.1
-
-# File validation
-python-magic==0.4.27
+# File validation (opcional)
+# python-magic==0.4.27
 
 # System monitoring
 psutil==5.9.8
