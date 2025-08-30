@@ -364,18 +364,28 @@ export default function GenerateReportPage() {
         {result && (
           <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm rounded-3xl p-8 border border-blue-400/20">
             <div className="flex items-center space-x-4 mb-8">
-              <div className="text-4xl animate-float">📊</div>
+              <div className="text-4xl animate-float">🤖</div>
               <div>
-                <h3 className="text-3xl font-bold text-white">Resultado del Informe</h3>
-                <p className="text-blue-200">Análisis técnico completo generado</p>
+                <h3 className="text-3xl font-bold text-white">Informe Inteligente Generado</h3>
+                <p className="text-blue-200">Análisis técnico con IA avanzada</p>
               </div>
             </div>
             
             <div className="space-y-6">
               {result.sections?.map((section: any, index: number) => (
-                <div key={index} className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl p-6 border border-blue-400/30">
+                <div key={index} className={`bg-gradient-to-r rounded-2xl p-6 border ${
+                  section.title.includes('IA') || section.title.includes('🤖') || section.title.includes('🔮') || section.title.includes('🚨') || section.title.includes('🧠') || section.title.includes('💡')
+                    ? 'from-purple-500/20 to-pink-500/20 border-purple-400/30'
+                    : 'from-blue-500/20 to-purple-500/20 border-blue-400/30'
+                }`}>
                   <h4 className="text-xl font-bold text-white mb-4 flex items-center space-x-3">
-                    <span className="text-2xl">📋</span>
+                    <span className="text-2xl">
+                      {section.title.includes('IA') ? '🤖' : 
+                       section.title.includes('Predictivo') ? '🔮' :
+                       section.title.includes('Anomalías') ? '🚨' :
+                       section.title.includes('Insights') ? '🧠' :
+                       section.title.includes('Recomendaciones') ? '💡' : '📋'}
+                    </span>
                     <span>{section.title}</span>
                   </h4>
                   

@@ -25,6 +25,15 @@ RUN pip install --no-cache /wheels/*
 # Copiamos el código de nuestra aplicación
 COPY ./app ./app
 COPY ./.env ./.env
+COPY ./setup_ai_models.py ./setup_ai_models.py
+
+# Instalar dependencias del sistema para modelos de IA
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configurar modelos de IA
+RUN python setup_ai_models.py
 
 # Exponemos el puerto y definimos el comando de inicio
 EXPOSE 8000

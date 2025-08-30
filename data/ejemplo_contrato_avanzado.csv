@@ -1,0 +1,6 @@
+presupuesto_aprobado,valor_ejecutado,fecha_fin_planificada,porcentaje_avance_fisico,nombre_proyecto,nombre_supervisor,descripcion_obra,tipo_contrato,ubicacion
+2500000,2200000,2025-09-15,88,Rehabilitación Vías Comuna 13,Ing. María González,Mejoramiento de vías terciarias en la comuna 13 de Medellín,Urgencia Manifiesta,Comuna 13 - Medellín
+5000000,4800000,2025-08-30,95,Construcción Puente Peatonal,Ing. Carlos Ramírez,Construcción de puente peatonal sobre quebrada La Iguaná,Urgencia Manifiesta,Quebrada La Iguaná
+1500000,1600000,2025-10-20,75,Mejoramiento Plazas Públicas,Arq. Ana Martínez,Recuperación de espacios públicos en el centro histórico,Urgencia Manifiesta,Centro Histórico
+3000000,2800000,2025-07-15,92,Construcción Escaleras Eléctricas,Ing. Luis Pérez,Instalación de escaleras eléctricas en barrios de ladera,Urgencia Manifiesta,Barrios de Ladera
+800000,750000,2025-11-30,60,Reparación Alcantarillado,Ing. Patricia López,Reparación de red de alcantarillado en zona industrial,Urgencia Manifiesta,Zona Industrial

@@ -4,11 +4,18 @@ Sistema web para la generación automática de informes técnicos para contratos
 
 ## 🚀 Características
 
-- **Análisis Automático**: Procesa archivos Excel con datos de contratos
-- **Alertas Inteligentes**: Genera mensajes técnicos con diferentes niveles de severidad
-- **Análisis Presupuestal**: Monitoreo de ejecución vs presupuesto aprobado
-- **Seguimiento de Cronograma**: Control de avance físico y fechas de finalización
-- **Interfaz Moderna**: Frontend responsive con Next.js y Tailwind CSS
+- **🤖 IA Inteligente Avanzada**: Sistema de machine learning con múltiples algoritmos
+- **🔮 Análisis Predictivo**: Predicción de riesgos y comportamientos futuros
+- **🚨 Detección de Anomalías**: Identificación automática de patrones anómalos
+- **📊 Insights Avanzados**: Métricas de rendimiento y eficiencia global
+- **💡 Recomendaciones Inteligentes**: Sugerencias basadas en IA para optimización
+- **🎯 Análisis de Riesgo**: Scoring de riesgo con múltiples dimensiones
+- **📈 Análisis Temporal**: Patrones y tendencias en series de tiempo
+- **🔍 Análisis Automático**: Procesa archivos Excel con datos de contratos
+- **⚠️ Alertas Inteligentes**: Genera mensajes técnicos con diferentes niveles de severidad
+- **💰 Análisis Presupuestal**: Monitoreo de ejecución vs presupuesto aprobado
+- **⏰ Seguimiento de Cronograma**: Control de avance físico y fechas de finalización
+- **🎨 Interfaz Moderna**: Frontend responsive con Next.js y Tailwind CSS
 
 ## 🏗️ Arquitectura
 
@@ -29,6 +36,10 @@ cd informes-infra-med
 # 2. Crear archivos de entorno
 cp backend/.env.example backend/.env
 cp frontend/.env.example frontend/.env.local
+
+# 3. Configurar modelos de IA (OPCIONAL - se hace automáticamente con Docker)
+cd backend
+python setup_ai_models.py
 ```
 
 ### Ejecución con Docker Compose (Recomendado)
@@ -93,8 +104,11 @@ npm run dev
 Para ejecutar las pruebas del sistema:
 
 ```bash
-# Ejecutar todas las pruebas
+# Ejecutar pruebas del sistema básico
 python test_system.py
+
+# Ejecutar pruebas del sistema de IA
+python test_ai_system.py
 
 # O usar el script de inicio que incluye pruebas
 python start-dev.py
@@ -205,6 +219,51 @@ Endpoint simplificado para pruebas rápidas.
 ### POST `/api/v1/reports/generate-demo`
 Genera un informe de demostración con datos de ejemplo.
 
+### POST `/api/v1/reports/ai-analysis`
+Análisis avanzado de IA con múltiples algoritmos de machine learning.
+**Response:**
+```json
+{
+  "ai_analysis": {
+    "risk_score": 0.75,
+    "confidence": 0.92,
+    "severity": "CRITICAL",
+    "predictions": {
+      "probabilidad_sobrecosto": 0.8,
+      "probabilidad_retraso": 0.6,
+      "probabilidad_cumplimiento": 0.4
+    },
+    "anomalies": [
+      {
+        "type": "SOBRECOSTO_CRITICO",
+        "severity": "CRITICAL",
+        "description": "Ejecución presupuestal excede el 100%",
+        "value": 105.2,
+        "threshold": 100
+      }
+    ],
+    "recommendations": [
+      "🚨 ALTA PROBABILIDAD DE SOBRECOSTO: Implementar control estricto de costos",
+      "⏰ RIESGO DE RETRASO: Acelerar frentes de trabajo críticos"
+    ],
+    "insights": {
+      "performance_metrics": {
+        "eficiencia_global": 0.85,
+        "velocidad_ejecucion": 1.2,
+        "sostenibilidad_temporal": 0.7
+      },
+      "risk_indicators": {
+        "nivel_riesgo_financiero": 0.8,
+        "nivel_riesgo_temporal": 0.6,
+        "probabilidad_incumplimiento": 0.6
+      }
+    }
+  },
+  "contract_data": {...},
+  "analysis_timestamp": "2025-01-27T10:30:00"
+}
+```
+
 ### GET `/api/v1/health/detailed`
 Health check detallado del sistema.
 
@@ -249,6 +308,32 @@ Health check detallado del sistema.
 - **Upload directo**: Los archivos se suben directamente al servidor
 - **Validación estricta**: Verificación de tipos de archivo y contenido
 - **Manejo seguro de errores**: No exposición de información sensible
+
+## 🤖 Sistema de IA Inteligente
+
+### Motor de IA Avanzado
+El sistema integra múltiples técnicas de machine learning y análisis de datos:
+
+- **🔮 Análisis Predictivo**: Predicción de sobrecostos, retrasos y probabilidades de cumplimiento
+- **🚨 Detección de Anomalías**: Identificación automática de patrones anómalos usando Isolation Forest y LOF
+- **📊 Scoring de Riesgo**: Cálculo de riesgo multidimensional con ponderación inteligente
+- **💡 Recomendaciones**: Generación automática de recomendaciones basadas en análisis de datos
+- **📈 Análisis Temporal**: Identificación de tendencias y patrones en series de tiempo
+- **🎯 Insights Avanzados**: Métricas de eficiencia global y sostenibilidad temporal
+
+### Algoritmos Implementados
+- **Random Forest**: Para predicción de riesgos
+- **Isolation Forest**: Para detección de anomalías
+- **Local Outlier Factor (LOF)**: Para detección de outliers
+- **Análisis de Series Temporales**: Para predicciones temporales
+- **NLP con spaCy**: Para procesamiento de texto en español
+- **Análisis de Sentimientos**: Para evaluación de contexto
+
+### Modelos de IA Utilizados
+- **spaCy es_core_news_sm**: Modelo de procesamiento de lenguaje natural en español
+- **NLTK VADER**: Análisis de sentimientos
+- **Scikit-learn**: Algoritmos de machine learning
+- **PyOD**: Detección de anomalías
 
 ## 🚀 Características Avanzadas
 
