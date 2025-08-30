@@ -40,3 +40,43 @@ python-magic==0.4.27
 
 # System monitoring
 psutil==5.9.8
+
+# ===== NUEVAS DEPENDENCIAS PARA IA INTELIGENTE =====
+
+# Machine Learning y IA
+scikit-learn==1.3.2
+numpy==1.24.3
+scipy==1.11.4
+
+# Hugging Face Transformers
+transformers==4.35.2
+torch==2.1.1
+tokenizers==0.15.0
+
+# Procesamiento de texto y NLP
+spacy==3.7.2
+nltk==3.8.1
+textblob==0.17.1
+
+# Análisis de datos avanzado
+plotly==5.17.0
+matplotlib==3.8.2
+seaborn==0.13.0
+
+# Análisis de series temporales
+statsmodels==0.14.0
+prophet==1.1.4
+
+# Detección de anomalías
+pyod==1.1.1
+
+# Optimización y clustering
+optuna==3.4.0
+scikit-optimize==0.9.0
+
+# Procesamiento de lenguaje natural en español
+es-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.7.0/es_core_news_sm-3.7.0-py3-none-any.whl
+
+# Utilidades para IA
+joblib==1.3.2
+pickle-mixin==1.0.2

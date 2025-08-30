@@ -1,32 +1,71 @@
-# Etapa 1: Build
-FROM node:18-alpine AS builder
+# Dockerfile optimizado para Frontend Next.js
+
+# Etapa 1: Dependencias
+FROM node:18-alpine AS deps
+
+# Instalar dependencias del sistema necesarias
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
-# Copiar package.json y package-lock.json
-COPY package*.json ./
+# Copiar archivos de dependencias
+COPY package.json package-lock.json* ./
 
-# Instalar dependencias
-RUN npm install
+# Instalar dependencias con cache optimizado
+RUN npm ci --only=production --silent && npm cache clean --force
 
-# Copiar el resto del código
+# Etapa 2: Builder optimizado
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Copiar dependencias desde la etapa anterior
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copiar código fuente
 COPY . .
 
-# Construir la aplicación para producción
+# Configurar variables de entorno para build optimizado
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV=production
+
+# Build optimizado con cache
 RUN npm run build
 
-# Etapa 2: Producción
-FROM node:18-alpine
+# Etapa 3: Runtime optimizado
+FROM node:18-alpine AS runner
+
+# Crear usuario no-root para seguridad
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
 WORKDIR /app
 
-# Copiar el build desde la etapa anterior
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./next.config.js
-COPY --from=builder /app/tailwind.config.ts ./tailwind.config.ts
-COPY --from=builder /app/tsconfig.json ./tsconfig.json
+# Variables de entorno para optimización
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
 
-# Exponer el puerto y correr la aplicación
+# Crear directorio para archivos estáticos
+RUN mkdir -p /app/.next/cache
+
+# Copiar archivos necesarios desde builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+
+# Copiar build optimizado
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# Cambiar al usuario no-root
+USER nextjs
+
+# Exponer puerto
 EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
+
+# Comando de inicio optimizado
 CMD ["npm", "start"]

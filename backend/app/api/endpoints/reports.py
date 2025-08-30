@@ -9,6 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.report import GeneratedReport
 from app.services.report_generator import ReportGeneratorService
 from app.services.enhanced_report_service import EnhancedReportService
+from app.services.intelligent_report_service import IntelligentReportService
+from app.services.ai_intelligence_engine import ContractIntelligenceEngine
 from app.db.session import get_db_optional
 from app.db.models import User
 # from app.core.rate_limiter import rate_limit  # DESHABILITADO TEMPORALMENTE
@@ -77,16 +79,13 @@ async def generate_report_simple(
             if os.path.exists(temp_file_path):
                 os.unlink(temp_file_path)
         
-        # Generar informe usando el servicio original
-        generator = ReportGeneratorService(data=contract_data)
-        report_sections = generator.generate_full_report()
+        # Generar informe usando el servicio inteligente de IA
+        intelligent_service = IntelligentReportService()
+        report = intelligent_service.generate_intelligent_report(contract_data)
 
-        if not report_sections:
-            raise ValueError("No se pudieron generar secciones para el informe. Verifique los datos de entrada.")
-
-        logger.info("Simple endpoint - Report generation completed successfully")
+        logger.info("Simple endpoint - Intelligent report generation completed successfully")
         
-        return GeneratedReport(sections=report_sections)
+        return report
         
     except ValueError as e:
         logger.error(f"Simple endpoint - Validation error: {e}")
@@ -192,19 +191,16 @@ async def generate_report_endpoint(
         #         # Si falla el servicio mejorado, usar fallback
         #         pass
         
-        # Fallback: usar el servicio original (sin BD)
-        generator = ReportGeneratorService(data=contract_data)
-        report_sections = generator.generate_full_report()
-
-        if not report_sections:
-            raise ValueError("No se pudieron generar secciones para el informe. Verifique los datos de entrada.")
+        # Usar el servicio inteligente de IA
+        intelligent_service = IntelligentReportService()
+        report = await intelligent_service.generate_intelligent_report(contract_data)
 
         # Registrar métricas y logging
         execution_time = time.time() - start_time
-        logger.info(f"Report generation completed successfully in {execution_time:.2f}s")
+        logger.info(f"Intelligent report generation completed successfully in {execution_time:.2f}s")
         # record_api_call("/api/v1/reports/generate", "POST", 200, execution_time)  # DESHABILITADO TEMPORALMENTE
         
-        return GeneratedReport(sections=report_sections)
+        return report
         
     except ValueError as e:
         execution_time = time.time() - start_time
@@ -218,7 +214,7 @@ async def generate_report_endpoint(
         raise HTTPException(status_code=500, detail=f"Error interno del servidor: {e}")
 
 @router.post("/generate-demo", response_model=GeneratedReport, summary="Generar Informe de Demostración")
-def generate_demo_report():
+async def generate_demo_report():
     """
     Endpoint de demostración que genera un informe con datos de ejemplo.
     Útil para probar la funcionalidad sin necesidad de un archivo Excel externo.
@@ -232,10 +228,83 @@ def generate_demo_report():
     }
     
     try:
-        generator = ReportGeneratorService(data=demo_data)
-        report_sections = generator.generate_full_report()
+        intelligent_service = IntelligentReportService()
+        report = await intelligent_service.generate_intelligent_report(demo_data)
 
-        return GeneratedReport(sections=report_sections)
+        return report
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generando informe de demostración: {e}")
+
+@router.post("/ai-analysis", summary="Análisis Avanzado de IA")
+async def ai_analysis_endpoint(
+    file: UploadFile = File(..., description="Archivo Excel (.xlsx, .xls) o CSV (.csv) con datos del contrato")
+):
+    """
+    Endpoint especializado para análisis avanzado de IA.
+    Proporciona análisis detallado con múltiples algoritmos de machine learning.
+    """
+    logger = get_logger(__name__)
+    logger.info(f"Starting AI analysis for file: {file.filename}")
+    
+    # Verificar extensión del archivo
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="Debe proporcionar un nombre de archivo")
+    
+    file_ext = os.path.splitext(file.filename)[1].lower()
+    if file_ext not in ['.xlsx', '.xls', '.csv']:
+        raise HTTPException(
+            status_code=400,
+            detail="Formato de archivo no soportado. Use Excel (.xlsx, .xls) o CSV (.csv)"
+        )
+    
+    try:
+        # Guardar archivo temporalmente
+        with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as temp_file:
+            contents = await file.read()
+            temp_file.write(contents)
+            temp_file_path = temp_file.name
+        
+        # Leer datos del archivo
+        try:
+            if file_ext == '.csv':
+                df = pd.read_csv(temp_file_path)
+            else:  # Excel
+                df = pd.read_excel(temp_file_path)
+            
+            contract_data = df.to_dict(orient='records')[0] if not df.empty else {}
+            
+        except Exception as e:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Error al procesar el archivo: {str(e)}"
+            )
+        finally:
+            if os.path.exists(temp_file_path):
+                os.unlink(temp_file_path)
+        
+        # Análisis directo con el motor de IA
+        ai_engine = ContractIntelligenceEngine()
+        ai_analysis = await ai_engine.analyze_contract_data(contract_data)
+        
+        # Preparar respuesta detallada
+        response = {
+            "ai_analysis": {
+                "risk_score": ai_analysis.risk_score,
+                "confidence": ai_analysis.confidence,
+                "severity": ai_analysis.severity.value,
+                "predictions": ai_analysis.predictions,
+                "anomalies": ai_analysis.anomalies,
+                "recommendations": ai_analysis.recommendations,
+                "insights": ai_analysis.insights
+            },
+            "contract_data": contract_data,
+            "analysis_timestamp": datetime.now().isoformat()
+        }
+        
+        logger.info("AI analysis completed successfully")
+        return response
+        
+    except Exception as e:
+        logger.error(f"Error in AI analysis: {e}")
+        raise HTTPException(status_code=500, detail=f"Error en análisis de IA: {e}")
