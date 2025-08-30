@@ -1,31 +1,42 @@
-# data/ - Archivos de Ejemplo
+# 📁 Directorio de Datos
 
-Esta carpeta contiene archivos de datos de ejemplo para el sistema de generación de informes de infraestructura médica.
+Este directorio contiene archivos de datos de ejemplo para el Sistema de Informes de Infraestructura.
 
-## Archivos incluidos
+## 📊 Archivos Disponibles
 
-- `datos_contrato_ejemplo.csv`: Archivo CSV con datos de ejemplo de un contrato de infraestructura médica.
+### `ejemplo_contrato.csv`
+Archivo de ejemplo con datos de contrato para pruebas del sistema.
 
-## Uso
-
-Estos archivos pueden utilizarse para:
-1. **Pruebas de desarrollo**: Probar la funcionalidad del sistema sin necesidad de datos reales
-2. **Demostración**: Mostrar capacidades del sistema a usuarios finales
-3. **Validación**: Verificar que el sistema procesa correctamente diferentes formatos de datos
-
-## Estructura de datos esperada
-
-Los archivos de datos deben contener las siguientes columnas principales:
-- `presupuesto_aprobado`: Valor del presupuesto aprobado
-- `valor_ejecutado`: Valor ejecutado del proyecto
-- `fecha_fin_planificada`: Fecha planeada de finalización
+**Estructura:**
+- `presupuesto_aprobado`: Presupuesto total aprobado para el contrato
+- `valor_ejecutado`: Valor total ejecutado hasta la fecha
+- `fecha_fin_planificada`: Fecha planificada de finalización del contrato
 - `porcentaje_avance_fisico`: Porcentaje de avance físico del proyecto
 
-## Formatos soportados
+**Ejemplo de uso:**
+```bash
+# Usar con el script de prueba
+python test_system.py
 
-- **CSV** (.csv): Valores separados por comas
-- **Excel** (.xlsx, .xls): Hojas de cálculo de Microsoft Excel
+# O cargar directamente en la aplicación web
+# http://localhost:3000/generate-report
+```
 
-## Seguridad
+### `datos_contrato_ejemplo.csv`
+Archivo de ejemplo adicional con diferentes valores para pruebas.
 
-⚠️ **Importante**: Nunca incluya datos sensibles o reales en estos archivos de ejemplo. Utilice únicamente datos ficticios para propósitos de demostración y pruebas.
+## 🔧 Formato Requerido
+
+Los archivos deben estar en formato CSV con las siguientes columnas:
+
+```csv
+presupuesto_aprobado,valor_ejecutado,fecha_fin_planificada,porcentaje_avance_fisico
+2500000,2200000,2025-09-15,88
+```
+
+## 📝 Notas
+
+- Los archivos deben usar codificación UTF-8
+- Los valores numéricos deben usar punto como separador decimal
+- Las fechas deben estar en formato YYYY-MM-DD
+- El porcentaje de avance debe estar entre 0 y 100

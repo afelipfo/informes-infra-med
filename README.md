@@ -37,7 +37,10 @@ cp frontend/.env.example frontend/.env.local
 ### Ejecución con Docker Compose (Recomendado)
 
 ```bash
-# Construir y ejecutar todos los servicios
+# Usar el script de inicio unificado (funciona en Windows, Linux y macOS)
+python start-dev.py
+
+# O ejecutar manualmente
 docker-compose up --build
 
 # En modo detached (segundo plano)
@@ -80,24 +83,25 @@ npm install
 # Iniciar servidor de desarrollo
 npm run dev
 ```
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-#### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
 
 ## 📋 Uso
 
 1. **Acceder a la aplicación**: Navega a http://localhost:3000
-2. **Ingresar URL del Excel**: Proporciona la URL de la API que devuelve el archivo Excel con los datos del contrato
+2. **Cargar archivo de datos**: Sube un archivo Excel (.xlsx, .xls) o CSV (.csv) con los datos del contrato
 3. **Generar Informe**: El sistema procesará automáticamente los datos y generará el informe técnico
 4. **Revisar Resultados**: El informe incluirá análisis presupuestal y de cronograma con alertas según corresponda
+
+## 🧪 Pruebas
+
+Para ejecutar las pruebas del sistema:
+
+```bash
+# Ejecutar todas las pruebas
+python test_system.py
+
+# O usar el script de inicio que incluye pruebas
+python start-dev.py
+```
 
 ## 📊 Formato de Datos Esperado
 
