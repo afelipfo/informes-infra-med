@@ -1,0 +1,10 @@
+# Fonts directory for local fonts
+# Note: Add Inter font files here to avoid Google Fonts dependency
+# Download from: https://fonts.google.com/specimen/Inter
+# Files needed:
+# - inter-regular.woff2
+# - inter-medium.woff2  
+# - inter-bold.woff2
+
+# Placeholder for local fonts
+# Remove this file when actual font files are added
